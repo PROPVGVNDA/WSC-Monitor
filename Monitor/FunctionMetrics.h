@@ -15,6 +15,7 @@ public:
         totalBytesWritten(0), totalBytesRead(0), totalDuration(0.0),
         totalMemoryAllocated(0), totalMemoryFreed(0) {}
 
+    std::string Serialize() const;
     static void InitializeMetrics();
 public:
     std::string functionName;

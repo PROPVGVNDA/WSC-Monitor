@@ -1,3 +1,4 @@
+#include <nlohmann/json.hpp>
 #include "FunctionMetrics.h"
 #include "FunctionMetricsFactory.h"
 
@@ -11,6 +12,20 @@ metrics_ptr virtualAllocp;
 metrics_ptr virtualFreep;
 metrics_ptr heapAllocp;
 metrics_ptr heapFreep;
+
+std::string FunctionMetrics::Serialize() const {
+    nlohmann::json j;
+    j["functionName"] = functionName;
+    j["callCount"] = callCount;
+    j["errorCount"] = errorCount;
+    j["totalBytesWritten"] = totalBytesWritten;
+    j["totalBytesRead"] = totalBytesRead;
+    j["totalDuration"] = totalDuration;
+    j["totalMemoryAllocated"] = totalMemoryAllocated;
+    j["totalMemoryFreed"] = totalMemoryFreed;
+
+    return j.dump();
+}
 
 void FunctionMetrics::InitializeMetrics() {
     createFileWp = FunctionMetricsFactory::CreateMetrics("CreateFileW");

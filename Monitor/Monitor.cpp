@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <fstream>
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include <string>
 
 #include "FunctionMetricsFactory.h"
@@ -20,12 +21,18 @@ void MetricsSenderThread() {
     while (continueSendingMetrics) {
         std::this_thread::sleep_for(std::chrono::seconds(5));
 
+        nlohmann::json jsonArray;
+
         auto metricsCopy = FunctionMetricsFactory::GetMetricsMapCopy();
-        std::string data = {};
+
         for (const auto& pair : metricsCopy) {
-            data += pair.second->callCount;
+            std::string serializedData = pair.second->Serialize();
+            jsonArray.push_back(nlohmann::json::parse(serializedData));
         }
-        networkManager.SendMessageToClient(data);
+
+        nlohmann::json jsonObject;
+        jsonObject["data"] = jsonArray;
+        networkManager.SendMessageToClient(jsonObject.dump());
     }
 }
 
