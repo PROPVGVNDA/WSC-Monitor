@@ -130,6 +130,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DetourManager.cpp" />
+    <ClCompile Include="FunctionMetrics.cpp" />
+    <ClCompile Include="FunctionMetricsFactory.cpp" />
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="hooks.h" />
     <ClCompile Include="log.cpp" />
@@ -137,6 +140,9 @@
     <ClCompile Include="NetworkManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DetourManager.h" />
+    <ClInclude Include="FunctionMetrics.h" />
+    <ClInclude Include="FunctionMetricsFactory.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="NetworkManager.h" />
   </ItemGroup>

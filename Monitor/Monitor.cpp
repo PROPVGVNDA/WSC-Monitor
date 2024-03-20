@@ -2,10 +2,14 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+
+#include "FunctionMetricsFactory.h"
+#include "DetourManager.h"
 #include "NetworkManager.h"
 
 const LPCWSTR PIPE_NAME = L"\\\\.\\pipe\\MyPipe";
 network::NetworkManager networkManager;
+DetourManager detourManager;
 
 std::atomic<bool> continueSendingMetrics{ true };
 
@@ -15,7 +19,13 @@ const byte retryDelaySeconds = 5;
 void MetricsSenderThread() {
     while (continueSendingMetrics) {
         std::this_thread::sleep_for(std::chrono::seconds(5));
-        networkManager.SendMessageToClient("TEST MESSAGE");
+
+        auto metricsCopy = FunctionMetricsFactory::GetMetricsMapCopy();
+        std::string data = {};
+        for (const auto& pair : metricsCopy) {
+            data += pair.second->callCount;
+        }
+        networkManager.SendMessageToClient(data);
     }
 }
 
@@ -30,6 +40,8 @@ BOOL ThreadDetach(HMODULE hDll) {
 }
 
 BOOL ProcessAttach(HMODULE hDll) {
+    detourManager.Attach();
+
     ThreadAttach(hDll);
 
     return TRUE;
@@ -37,6 +49,8 @@ BOOL ProcessAttach(HMODULE hDll) {
 
 BOOL ProcessDetach(HMODULE hDll) {
     ThreadDetach(hDll);
+
+    detourManager.Detach();
 
     return TRUE;
 }
@@ -59,6 +73,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call,
         if (!networkManager.IsValidHandle()) {
             return FALSE;
         }
+        FunctionMetrics::InitializeMetrics();
         metricsThread = std::thread(MetricsSenderThread);
         return ProcessAttach(hModule);
     case DLL_PROCESS_DETACH:
