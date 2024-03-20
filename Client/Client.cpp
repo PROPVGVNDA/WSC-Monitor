@@ -5,6 +5,7 @@
 #include "PipeManager.h"
 
 std::string dllPath = {};
+const std::string dllName = "Monitor.dll";
 
 bool findDLL()
 {
@@ -13,13 +14,13 @@ bool findDLL()
 
     GetCurrentDirectoryA(bufferSize, buffer);
 
-    DWORD fileAttr = GetFileAttributesA("dll.dll");
+    DWORD fileAttr = GetFileAttributesA(dllName.c_str());
     if (fileAttr == INVALID_FILE_ATTRIBUTES) {
         MessageBoxA(NULL, "Monitor.dll file could not be found", "Monitor", MB_ICONERROR | MB_OK);
         return false;
     }
 
-    dllPath = buffer + std::string("\\dll.dll");
+    dllPath = buffer + dllName;
     return true;
 }
 
