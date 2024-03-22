@@ -24,7 +24,7 @@ bool findDLL()
         return false;
     }
 
-    dllPath = buffer + std::string(dllName);
+    dllPath = buffer + std::string("\\" + dllName);
     return true;
 }
 
