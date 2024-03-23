@@ -37,4 +37,4 @@ To use WinAPI Monitor, follow these steps:
 4. Run Prometheus with a target at `localhost:8080`
 
 # Disclaimer
-This project is solely intended for educational and experimental purposes. It should not be used in any production or real-world environments. The developers and contributors of this project hold no liability for any misuse or damage caused by the software.
+This project is solely intended for educational and experimental purposes. It should not be used in any production or real-world environments. Developer of this project holds no liability for any misuse or damage caused by the software.
